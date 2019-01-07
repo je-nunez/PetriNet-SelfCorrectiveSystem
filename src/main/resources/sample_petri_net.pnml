@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<pnml>
+<net id="my_system">
+
+    <place id="my_normal_state_1">
+        <graphics>
+            <position x="1168" y="87" />
+            <dimension x="13" y="13" />
+        </graphics>
+        <name>
+            <text>This is my normal state #1</text>
+         </name>
+    </place>
+    <place id="my_corrected_state_1">
+        <graphics>
+            <position x="1096" y="87" />
+            <dimension x="13" y="13" />
+        </graphics>
+        <name>
+            <text>This is my corrected state #2</text>
+         </name>
+    </place>
+
+    <transition id="handling_my_alert_0">
+        <graphics>
+            <position  x="700" y="55" />
+            <dimension x="13" y="13" />
+        </graphics>
+        <name>
+            <text>We are at this transition in the Petri Net once we have received my_alert_0</text>
+         </name>
+    </transition>
+    <transition id="handling_my_alert_1">
+        <graphics>
+            <position  x="628" y="55" />
+            <dimension x="13" y="13" />
+        </graphics>
+        <name>
+            <text>We are at this transition in the Petri Net once we have received my_alert_1</text>
+         </name>
+    </transition>
+
+    <arc id="my_alert_0" source="my_normal_state_1" target="handling_my_alert_0" />
+
+    <arc id="my_alert_1" source="my_normal_state_1" target="handling_my_alert_1" />
+
+    <arc id="correcting_alert_0" source="handling_my_alert_0" target="my_corrected_state_1" />
+
+    <arc id="correcting_alert_1" source="handling_my_alert_1" target="my_corrected_state_1" />
+
+</net>
+</pnml>
