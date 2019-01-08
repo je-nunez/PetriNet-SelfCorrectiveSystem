@@ -1,0 +1,103 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>SelfCorrectiveSystem</groupId>
+  <artifactId>SelfCorrectiveSystem</artifactId>
+  <version>0.0.1</version>
+  <packaging>jar</packaging>
+
+  <name>Self-Corrective System using Petri Net models</name>
+
+  <properties>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+      <mainClass>SelfCorrectiveSystem</mainClass>
+      <maven.compile.java.version>1.8</maven.compile.java.version>
+      <shadedClassifierName>executable</shadedClassifierName>
+
+      <jbpt.version>0.3.1</jbpt.version>
+  </properties>
+
+
+  <repositories>
+        <repository>
+            <id>oss-sonatype</id>
+            <name>oss-sonatype</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+        </repository>
+  </repositories>
+
+  <dependencies>
+        <dependency>
+            <groupId>org.jbpt</groupId>
+            <artifactId>jbpt-petri</artifactId>
+            <version>${jbpt.version}</version>
+        </dependency>
+  </dependencies>
+
+  <build>
+      <defaultGoal>clean compile package exec:exec</defaultGoal>
+      <plugins>
+         <plugin>
+              <groupId>com.jolira</groupId>
+              <artifactId>onejar-maven-plugin</artifactId>
+              <version>1.4.4</version>
+              <executions>
+                  <execution>
+                      <configuration>
+                          <mainClass>${mainClass}</mainClass>
+                          <classifier>onejar</classifier>
+                      </configuration>
+                      <goals>
+                          <goal>one-jar</goal>
+                      </goals>
+                  </execution>
+              </executions>
+         </plugin>
+         <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-compiler-plugin</artifactId>
+              <version>3.8.0</version>
+              <configuration>
+                  <source>${maven.compile.java.version}</source>
+                  <target>${maven.compile.java.version}</target>
+                  <compilerArgument>-Xlint:all</compilerArgument>
+                  <showWarnings>true</showWarnings>
+                  <showDeprecation>true</showDeprecation>
+              </configuration>
+         </plugin>
+
+         <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-jar-plugin</artifactId>
+              <version>3.1.0</version>
+              <executions>
+                <execution>
+                  <id>default-jar</id>
+                </execution>
+              </executions>
+         </plugin>
+
+         <plugin>
+              <groupId>org.codehaus.mojo</groupId>
+              <artifactId>exec-maven-plugin</artifactId>
+              <version>1.6.0</version>
+              <executions>
+                  <execution>
+                      <goals>
+                          <goal>exec</goal>
+                      </goals>
+                   </execution>
+              </executions>
+
+              <configuration>
+                  <executable>java</executable>
+                  <commandlineArgs>
+                      -Done-jar.main.class=${mainClass} -jar ${project.build.directory}/${project.build.finalName}.one-jar.jar
+                  </commandlineArgs>
+              </configuration>
+          </plugin>
+      </plugins>
+  </build>
+
+</project>
