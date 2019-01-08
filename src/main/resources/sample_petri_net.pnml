@@ -40,9 +40,21 @@
          </name>
     </transition>
 
+    <transition id="handling_my_alert_2">
+        <graphics>
+            <position  x="556" y="55" />
+            <dimension x="13" y="13" />
+        </graphics>
+        <name>
+            <text>We are at this transition in the Petri Net once we have received my_alert_2</text>
+         </name>
+    </transition>
+
     <arc id="my_alert_0" source="my_normal_state_1" target="handling_my_alert_0" />
 
     <arc id="my_alert_1" source="my_normal_state_1" target="handling_my_alert_1" />
+
+    <arc id="my_alert_2" source="my_normal_state_1" target="handling_my_alert_2" />
 
     <arc id="correcting_alert_0" source="handling_my_alert_0" target="my_corrected_state_1" />
 
