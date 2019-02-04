@@ -10,6 +10,11 @@
         <name>
             <text>This is my normal state #1</text>
          </name>
+         <!--
+            <initialMarking>
+               <text>1</text>
+            </initialMarking>
+         -->
     </place>
     <place id="my_corrected_state_1">
         <graphics>
@@ -27,7 +32,7 @@
             <dimension x="13" y="13" />
         </graphics>
         <name>
-            <text>We are at this transition in the Petri Net once we have received my_alert_0</text>
+            <text>A label: We are at this transition in the Petri Net once we have received my_alert_0</text>
          </name>
     </transition>
     <transition id="handling_my_alert_1">
@@ -36,7 +41,7 @@
             <dimension x="13" y="13" />
         </graphics>
         <name>
-            <text>We are at this transition in the Petri Net once we have received my_alert_1</text>
+            <text>A label: We are at this transition in the Petri Net once we have received my_alert_1</text>
          </name>
     </transition>
 
@@ -46,9 +51,15 @@
             <dimension x="13" y="13" />
         </graphics>
         <name>
-            <text>We are at this transition in the Petri Net once we have received my_alert_2</text>
+            <text>A label: We are at this transition in the Petri Net once we have received my_alert_2</text>
          </name>
     </transition>
+
+    <!-- Alerts and Corrective-actions are both Flows -or Arcs- in the Petri Net,
+         the different is that an alert is a flow or arc going from a place to a
+         transition, whereas a corrective-action is a flow or arc going from a
+         transition to a place in the Petri Net.
+      -->
 
     <arc id="my_alert_0" source="my_normal_state_1" target="handling_my_alert_0" />
 
@@ -56,9 +67,17 @@
 
     <arc id="my_alert_2" source="my_normal_state_1" target="handling_my_alert_2" />
 
-    <arc id="correcting_alert_0" source="handling_my_alert_0" target="my_corrected_state_1" />
+    <arc id="correcting_alert_0" source="handling_my_alert_0" target="my_corrected_state_1" >
+        <toolspecific tool="AutoCorrective" version="0.1">
+            <command program="fix_alert_0.py" arg="some args" />
+        </toolspecific>
+    </arc>
 
-    <arc id="correcting_alert_1" source="handling_my_alert_1" target="my_corrected_state_1" />
+    <arc id="correcting_alert_1" source="handling_my_alert_1" target="my_corrected_state_1" >
+        <toolspecific tool="AutoCorrective" version="0.1">
+            <command program="fix_alert_1.py" arg="other args" />
+        </toolspecific>
+    </arc>
 
 </net>
 </pnml>

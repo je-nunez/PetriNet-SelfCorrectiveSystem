@@ -3,12 +3,23 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
 import org.jbpt.petri.Flow;
 import org.jbpt.petri.NetSystem;
 import org.jbpt.petri.Node;
 import org.jbpt.petri.Place;
 import org.jbpt.petri.Transition;
 import org.jbpt.petri.io.PNMLSerializer;
+import org.jbpt.throwable.SerializationException;
+
+import org.w3c.dom.Document;
 
 public final class SelfCorrectiveSystem {
 
@@ -18,6 +29,12 @@ public final class SelfCorrectiveSystem {
   protected NetSystem petriNet = null;
 
   protected void loadPetriNet(String fileNamePNML) throws IOException {
+    // We need to have our own PNMLSerializer in order to read the
+    // "toolspecific" element under a flow or arc (containing, for us, the
+    // corrective command to execute for the corrective-action associated to
+    // that flow or arc).
+    // See:
+    // https://github.com/jbpt/codebase/blob/master/jbpt-petri/src/main/java/org/jbpt/petri/io/PNMLSerializer.java#L150
     PNMLSerializer ser = new PNMLSerializer();
     petriNet = ser.parse(fileNamePNML);
   }
@@ -100,6 +117,26 @@ public final class SelfCorrectiveSystem {
 
   }
 
+  protected void printPetriNet() {
+
+    try {
+      Document doc = PNMLSerializer.serialize(petriNet, PNMLSerializer.LOLA);
+
+      DOMSource domSource = new DOMSource(doc);
+  		
+      StreamResult streamResult = new StreamResult(System.out);
+      TransformerFactory tf = TransformerFactory.newInstance();
+      Transformer serializer;
+      serializer = tf.newTransformer();
+      serializer.setOutputProperty(OutputKeys.INDENT, "yes");
+      serializer.transform(domSource, streamResult);
+    } catch (SerializationException|
+             TransformerException e) {
+      e.printStackTrace();
+    }
+  }
+
+
   public static void main(final String[] args) throws Exception {
 
     SelfCorrectiveSystem scSystem = new SelfCorrectiveSystem();
@@ -112,10 +149,12 @@ public final class SelfCorrectiveSystem {
     }
 
     scSystem.loadPetriNet(fnamePNML);
+    scSystem.printPetriNet();
     scSystem.dumpPetriNetAlerts();
     scSystem.dumpPetriNetCorrectiveActions();
 
     scSystem.dumpAlertsWithoutCorrectiveActions();
+
   }
 
 }
