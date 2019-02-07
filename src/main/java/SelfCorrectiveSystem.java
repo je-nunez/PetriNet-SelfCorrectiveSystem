@@ -1,5 +1,6 @@
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,6 +11,8 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import org.jbpt.petri.Flow;
 import org.jbpt.petri.NetSystem;
@@ -27,6 +30,8 @@ public final class SelfCorrectiveSystem {
                         "src/main/resources/sample_petri_net.pnml";
 
   protected NetSystem petriNet = null;
+  protected
+      HashMap<String, ImmutablePair<String, String>> correctiveActions = null;
 
   protected void loadPetriNet(String fileNamePNML) throws IOException {
     // We need to have our own PNMLSerializer in order to read the
@@ -35,8 +40,9 @@ public final class SelfCorrectiveSystem {
     // that flow or arc).
     // See:
     // https://github.com/jbpt/codebase/blob/master/jbpt-petri/src/main/java/org/jbpt/petri/io/PNMLSerializer.java#L150
-    PNMLSerializer ser = new PNMLSerializer();
+    MyPNMLReaderToolSpecific ser = new MyPNMLReaderToolSpecific();
     petriNet = ser.parse(fileNamePNML);
+    correctiveActions = ser.getCorrectiveActions();
   }
 
   protected void dumpPetriNetAlerts() {
@@ -65,8 +71,19 @@ public final class SelfCorrectiveSystem {
       Node dst = arc.getTarget();
       if (src instanceof Transition
              && dst instanceof Place) {
+        String command = "not-set";
+        String args = "";
+        ImmutablePair<String, String> correctAction =
+             correctiveActions.get(arc.getId());
+        if (correctAction != null) {
+          command = correctAction.getLeft();
+          args = correctAction.getRight();
+        }
         System.out.println(
-             String.format("Corrective-Action: '%s' -> '%s'", src, dst)
+             String.format("Corrective-Action: '%s' -> '%s'\n"
+                           + "             run : command: '%s' args: '%s'",
+                           src, dst,
+                           command, args)
         );
       }
     }
@@ -123,15 +140,15 @@ public final class SelfCorrectiveSystem {
       Document doc = PNMLSerializer.serialize(petriNet, PNMLSerializer.LOLA);
 
       DOMSource domSource = new DOMSource(doc);
-  		
+
       StreamResult streamResult = new StreamResult(System.out);
       TransformerFactory tf = TransformerFactory.newInstance();
       Transformer serializer;
       serializer = tf.newTransformer();
       serializer.setOutputProperty(OutputKeys.INDENT, "yes");
       serializer.transform(domSource, streamResult);
-    } catch (SerializationException|
-             TransformerException e) {
+    } catch (SerializationException
+             | TransformerException e) {
       e.printStackTrace();
     }
   }
