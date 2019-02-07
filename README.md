@@ -33,8 +33,10 @@ Example execution through Maven:
       Alert: 'This is my normal state #1' -> 'handling_my_alert_0'
             
       Corrective Actions in the system:
-      Corrective-Action: 'handling_my_alert_1' -> 'This is my corrected state #2'
       Corrective-Action: 'handling_my_alert_0' -> 'This is my corrected state #2'
+                   run : command: 'fix_alert_0.py' args: 'some args'
+      Corrective-Action: 'handling_my_alert_1' -> 'This is my corrected state #2'
+                   run : command: 'fix_alert_1.py' args: 'other args'
             
       Alerts without Corrective Actions:
       Alert without corrective-action: 'handling_my_alert_2'
