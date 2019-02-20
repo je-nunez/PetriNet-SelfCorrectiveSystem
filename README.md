@@ -7,6 +7,19 @@ Modelling a self-corrective system using PetriNets on the jBPT Java library
 This project is a *work in progress*. The implementation is *incomplete* and
 subject to change. The documentation can be inaccurate.
 
+# Brief Introduction
+
+In the paper "Petri nets: Properties, analysis and applications"
+(Proceedings of the IEEE, Volume: 77, Issue: 4, Apr 1989), Professor Tadao Murata
+gives an introduction to Petri Nets as well as links to the bibliography, and,
+in Section IV, shows some behavioral properties of them, like `boundedness`
+(the values of the markings in the net are always bounded), `safeness`, and
+`liveness` (pages 7 and 8), and in Section VI, "Characterizations of Liveness,
+Safeness, and Reachability", refers to some theorems about these properties for
+some known subclasses of Petri nets, like state machines and others (pages 13 to 17).
+The paper is available at:
+[https://www.cs.uic.edu/~murata/PAPERs/1989.IEEE.Proc.pdf.gz](https://www.cs.uic.edu/~murata/PAPERs/1989.IEEE.Proc.pdf.gz)
+
 # Notes:
 
 A self-corrective system is related to Systems Engineering, for, ideally, a
