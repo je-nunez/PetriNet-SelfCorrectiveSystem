@@ -30,15 +30,21 @@ former is a necessary condition for the latter). Perhaps this could be
 expressed in some degree as the `liveness` of the system (mentioned above,
 in the introductory paper by Tadao Murata, although `liveness` could be a
 stronger condition than `self-corrective`, because, as defined in page 8,
-paragraph 2 of that paper, *"an initial marking M0 [i.e., initial resources or
-assignments -my note] of a system is said to be 'live' if, no matter what
-marking has been reached from [this initial marking] M0, it is possible to
-ultimately fire any transition of the net by progressing through some further
-firing sequence"*: it this last part, *"... if, no matter what
-marking has been reached from [this initial marking] M0, __it is possible to
-ultimately fire any transition of the net by progressing through some further
-firing sequence__"*, which seems to be stronger than what we need
-(self-correction); i.e., does it need:
+paragraph 2 of that paper:
+
+* *"an initial marking M0 [i.e., initial resources or assignments -my note]
+of a system is said to be 'live' if, no matter what marking has been reached
+from [this initial marking] M0, it is possible to ultimately fire any
+transition of the net by progressing through some further firing sequence"*
+
+It is the last part in that definition,
+
+* *"... if, no matter what marking has been reached from [this initial marking]
+M0, __it is possible to ultimately fire any transition of the net by progressing
+through some further firing sequence__"*
+
+what seems to be stronger than what we need (self-correction); i.e., does it
+need:
 
 * *"... to ultimately fire __any__ transition of the net by ..."*
 
