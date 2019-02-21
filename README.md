@@ -26,8 +26,28 @@ A self-corrective system is related to Systems Engineering, for, ideally, a
 system in this discipline should have corrective actions, either
 interior (self) or exterior corrective actions. Thus, for example, the more
 self-corrective a system is, then the more autonomous it can be (ie., the
-former is a necessary condition for the latter). Besides, Petri-Nets are a
-well-known model to represent Systems Engineering (see, e.g.,
+former is a necessary condition for the latter). Perhaps this could be
+expressed in some degree as the `liveness` of the system (mentioned above,
+in the introductory paper by Tadao Murata, although `liveness` could be a
+stronger condition than `self-corrective`, because, as defined in page 8,
+paragraph 2 of that paper, *"an initial marking M0 [i.e., initial resources or
+assignments -my note] of a system is said to be 'live' if, no matter what
+marking has been reached from [this initial marking] M0, it is possible to
+ultimately fire any transition of the net by progressing through some further
+firing sequence"*: it this last part, *"... if, no matter what
+marking has been reached from [this initial marking] M0, __it is possible to
+ultimately fire any transition of the net by progressing through some further
+firing sequence__"*, which seems to be stronger than what we need
+(self-correction); i.e., does it need:
+
+* *"... to ultimately fire __any__ transition of the net by ..."*
+
+or merely
+
+* *"... to ultimately fire __some [well-known]__ transitions of the net by ..."*?
+This is a very early idea, which needs more analysis and insights).
+Returning to the main topic, Petri-Nets are a well-known model to represent
+Systems Engineering (see, e.g.,
 [ISO/IEC 15909-1:2004 Systems and software engineering -- High-level Petri nets -- Part 1: Concepts, definitions and graphical notation](https://www.iso.org/standard/38225.html)
 and
 [ISO/IEC 15909-2:2011 Systems and software engineering -- High-level Petri nets -- Part 2: Transfer format](https://www.iso.org/standard/43538.html).)
