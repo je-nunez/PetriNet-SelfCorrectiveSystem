@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<pnml>
+
+<!-- This approach separates the system according to
+     its resource dimensions: ie., one resource
+     dimension for the CPU available in the system,
+     another dimension for the RAM available, and
+     so -->
+
+<net id="resource_Dimensions_of_my_system">
+
+    <place id="resource_dimension_CPU">
+        <graphics>
+            <position x="1168" y="87" />
+            <dimension x="13" y="13" />
+        </graphics>
+        <name>
+            <text>System resource dimension: CPU available</text>
+         </name>
+         <initialMarking>
+            <!-- capacity of this resource dimension when system is idle -->
+            <text>1</text>
+         </initialMarking>
+    </place>
+    <place id="resource_dimension_RAM">
+         <graphics>
+            <position x="1096" y="87" />
+            <dimension x="13" y="13" />
+         </graphics>
+         <name>
+            <text>System resource dimension: RAM available</text>
+         </name>
+         <initialMarking>
+            <!-- capacity of this resource dimension when system is idle -->
+            <text>1</text>
+         </initialMarking>
+    </place>
+    <place id="resource_dimension_Disk_IO">
+         <!-- could be several of this -->
+         <graphics>
+            <position x="1024" y="87" />
+            <dimension x="13" y="13" />
+         </graphics>
+         <name>
+            <text>System resource dimension: Disk I/O available</text>
+         </name>
+         <initialMarking>
+            <!-- capacity of this resource dimension when system is idle -->
+            <text>1</text>
+         </initialMarking>
+    </place>
+    <place id="resource_dimension_Network_Bandwidth">
+         <graphics>
+            <position x="952" y="87" />
+            <dimension x="13" y="13" />
+         </graphics>
+         <name>
+            <text>System resource dimension: Network Bandwidth available</text>
+         </name>
+         <initialMarking>
+            <!-- capacity of this resource dimension when system is idle -->
+            <text>1</text>
+         </initialMarking>
+    </place>
+    <!-- ... more resource dimensions here, like Router/Switch queues, Disk space, etc -->
+
+    <transition id="handling_my_alert_CPU">
+        <graphics>
+            <position  x="700" y="55" />
+            <dimension x="13" y="13" />
+        </graphics>
+        <name>
+            <text>A label: We are at this transition in the Petri Net once we have received my_alert_CPU</text>
+         </name>
+    </transition>
+    <transition id="handling_my_alert_RAM">
+        <graphics>
+            <position  x="628" y="55" />
+            <dimension x="13" y="13" />
+        </graphics>
+        <name>
+            <text>A label: We are at this transition in the Petri Net once we have received my_alert_RAM</text>
+         </name>
+    </transition>
+
+    <transition id="handling_my_alert_CPU_Network_Bandwidth">
+        <graphics>
+            <position  x="556" y="55" />
+            <dimension x="13" y="13" />
+        </graphics>
+        <name>
+            <text>A label: We are at this transition in the Petri Net once we have received my_alert_CPU_Network_Bandwidth</text>
+         </name>
+    </transition>
+    <!-- ... more ... -->
+
+
+    <arc id="my_alert_CPU"
+            source="resource_dimension_CPU"
+            target="handling_my_alert_CPU" />
+
+    <arc id="my_alert_RAM"
+            source="resource_dimension_RAM"
+            target="handling_my_alert_RAM" />
+
+    <arc id="my_alert_CPU_Network_Bandwidth_CPU"
+            source="resource_dimension_CPU"
+            target="handling_my_alert_CPU_Network_Bandwidth" />
+
+    <arc id="my_alert_CPU_Network_Bandwidth_NetwBW"
+            source="resource_dimension_Network_Bandwidth"
+            target="handling_my_alert_CPU_Network_Bandwidth" />
+    <!-- ... more triggering alerts (arcs) ... -->
+
+    <arc id="correcting_alert_CPU" source="handling_my_alert_CPU" target="resource_dimension_CPU" >
+        <toolspecific tool="AutoCorrective" version="0.1">
+            <command program="fix_alert_CPU.py" arg="some args" />
+        </toolspecific>
+    </arc>
+
+    <arc id="correcting_alert_RAM" source="handling_my_alert_RAM" target="resource_dimension_RAM" >
+        <toolspecific tool="AutoCorrective" version="0.1">
+            <command program="fix_alert_RAM.py" arg="other args" />
+        </toolspecific>
+    </arc>
+    <!-- ... more corrective actions (arcs) ... -->
+
+</net>
+</pnml>
