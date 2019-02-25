@@ -1,4 +1,5 @@
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -6,7 +7,6 @@ import java.util.Set;
 
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -21,13 +21,16 @@ import org.jbpt.petri.Place;
 import org.jbpt.petri.Transition;
 import org.jbpt.petri.io.PNMLSerializer;
 import org.jbpt.throwable.SerializationException;
+import org.jbpt.utils.IOUtils;
 
 import org.w3c.dom.Document;
 
 public final class SelfCorrectiveSystem {
 
   private static String defaultPetriNetPNMLFile =
-                        "src/main/resources/sample_petri_net.pnml";
+    "src/main/resources/sample_petri_net_resources_dimensions.pnml";
+  // "src/main/resources/sample_petri_net.pnml";
+  // "src/main/resources/sample_petri_net_resources_dimensions.pnml";
 
   protected NetSystem petriNet = null;
   protected
@@ -56,7 +59,11 @@ public final class SelfCorrectiveSystem {
       if (src instanceof Place
              && dst instanceof Transition) {
         System.out.println(
-             String.format("Alert: '%s' -> '%s'", src, dst)
+             String.format(
+                   "Alert: from '%s' -- to --> '%s'\n"
+                   + "             Note: '%s'\n",
+                   src, dst, dst.getLabel()
+             )
         );
       }
     }
@@ -80,10 +87,11 @@ public final class SelfCorrectiveSystem {
           args = correctAction.getRight();
         }
         System.out.println(
-             String.format("Corrective-Action: '%s' -> '%s'\n"
-                           + "             run : command: '%s' args: '%s'",
-                           src, dst,
-                           command, args)
+             String.format(
+                   "Corrective-Action: from '%s' -- to --> '%s'\n"
+                   + "             run : command: '%s' args: '%s'",
+                   src, dst,
+                   command, args)
         );
       }
     }
@@ -91,7 +99,8 @@ public final class SelfCorrectiveSystem {
 
   protected void dumpAlertsWithoutCorrectiveActions() {
 
-    System.out.println("\nAlerts without Corrective Actions:");
+    System.out.println("\nAlerts without Corrective Actions"
+                       + " (possible page out?):");
 
     // The end of an alert (arc in the Petri Net) is a transition in the
     // Petri Net. A corrective action is an arc starting in a transition
@@ -132,6 +141,9 @@ public final class SelfCorrectiveSystem {
       );
     }
 
+    if (transitionsWithoutOutgoingArcs.size() > 0) {
+      System.out.println();
+    }
   }
 
   protected void printPetriNet() {
@@ -149,6 +161,54 @@ public final class SelfCorrectiveSystem {
       serializer.transform(domSource, streamResult);
     } catch (SerializationException
              | TransformerException e) {
+      e.printStackTrace();
+    }
+  }
+
+  protected void renderPetriNetPNG(String directory, String pngFname) {
+    // NOTE: JBPT uses the `dot` program from GraphViz to render the Petri
+    // net model (and other models as well, like graphs, etc), and this
+    // progrem and/or package needs to be installed locally
+    // (see: https://graphviz.gitlab.io/download/)
+
+    // we need to clone the original model, because it has long strings and
+    // we need to shorten those strings so that the model can be readable in
+    // its PNG rendering
+    NetSystem clone = (NetSystem) petriNet.clone();
+    System.out.println("Meaning of the PNG rendering:");
+    int idx = 1;
+    for (Node node: clone.getPlaces()) {
+      System.out.println(
+          String.format("Idx 'p%d' means place '%s'",
+                        idx, node.getLabel())
+      );
+      node.setName(String.format("p%d", idx));
+      node.setLabel(String.format("p%d", idx));
+      // node.setDescription("");
+      idx++;
+    }
+    for (Transition transition: clone.getTransitions()) {
+      System.out.println(
+          String.format("Idx 't%d' means transition '%s'",
+                        idx, transition.getLabel())
+      );
+      transition.setName(String.format("t%d", idx));
+      transition.setLabel(String.format("t%d", idx));
+      // transition.setDescription("");
+      idx++;
+    }
+
+    try {
+      IOUtils.invokeDOT(directory, pngFname, clone.toDOT());
+      System.out.println(
+          String.format("Rendered model to PNG: %s%s%s",
+                        directory, File.separator, pngFname)
+      );
+    } catch (IOException e) {
+      System.err.println(
+          String.format("Failed to render model to PNG: %s%s%s",
+                        directory, File.separator, pngFname)
+      );
       e.printStackTrace();
     }
   }
@@ -171,7 +231,10 @@ public final class SelfCorrectiveSystem {
     scSystem.dumpPetriNetCorrectiveActions();
 
     scSystem.dumpAlertsWithoutCorrectiveActions();
-
+    scSystem.renderPetriNetPNG(
+        System.getProperty("java.io.tmpdir"),
+        "rendered_model.png"
+    );
   }
 
 }

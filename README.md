@@ -51,6 +51,7 @@ need:
 or merely
 
 * *"... to ultimately fire __some [well-known]__ transitions of the net by ..."*?
+
 This is a very early idea, which needs more analysis and insights).
 Returning to the main topic, Petri-Nets are a well-known model to represent
 Systems Engineering (see, e.g.,
@@ -67,17 +68,43 @@ Example execution through Maven:
       $ mvn
       [...]
       Alerts in the system:
-      Alert: 'This is my normal state #1' -> 'handling_my_alert_2'
-      Alert: 'This is my normal state #1' -> 'handling_my_alert_1'
-      Alert: 'This is my normal state #1' -> 'handling_my_alert_0'
-            
-      Corrective Actions in the system:
-      Corrective-Action: 'handling_my_alert_0' -> 'This is my corrected state #2'
-                   run : command: 'fix_alert_0.py' args: 'some args'
-      Corrective-Action: 'handling_my_alert_1' -> 'This is my corrected state #2'
-                   run : command: 'fix_alert_1.py' args: 'other args'
-            
-      Alerts without Corrective Actions:
-      Alert without corrective-action: 'handling_my_alert_2'
+      Alert: from 'System resource dimension: CPU available' -- to --> 'handling_my_alert_CPU_Network_Bandwidth'
+                   Note: 'We are at this transition once we have received my_alert_CPU_Network_Bandwidth'
+       
 
+      Alert: from 'System resource dimension: Disk Space available' -- to --> 'handling_my_alert_Disk_Space'
+                   Note: 'We are at this transition once we have received my_alert_Disk_Space'
+       
+      Alert: from 'System resource dimension: CPU available' -- to --> 'handling_my_alert_CPU'
+                   Note: 'We are at this transition once we have received my_alert_CPU'
+       
+      Alert: from 'System resource dimension: Network Bandwidth available' -- to --> 'handling_my_alert_Network_Bandwidth'
+                   Note: 'We are at this transition once we have received my_alert_Network_Bandwidth'
+       
+      Alert: from 'System resource dimension: RAM available' -- to --> 'handling_my_alert_RAM'
+                   Note: 'We are at this transition once we have received my_alert_RAM'
+       
+      Alert: from 'System resource dimension: Disk I/O available' -- to --> 'handling_my_alert_Disk_IO'
+                   Note: 'We are at this transition once we have received my_alert_Disk_IO'
+       
+      Alert: from 'System resource dimension: Network Bandwidth available' -- to --> 'handling_my_alert_CPU_Network_Bandwidth'
+                   Note: 'We are at this transition once we have received my_alert_CPU_Network_Bandwidth'
+        
+        
+      Corrective Actions in the system:
+      Corrective-Action: from 'handling_my_alert_RAM' -- to --> 'System resource dimension: RAM available'
+                   run : command: 'fix_alert_RAM.py' args: 'other args'
+      Corrective-Action: from 'handling_my_alert_CPU' -- to --> 'System resource dimension: CPU available'
+                   run : command: 'fix_alert_CPU.py' args: 'some args'
+      Corrective-Action: from 'handling_my_alert_Disk_Space' -- to --> 'System resource dimension: Disk Space available'
+                   run : command: 'fix_alert_Disk_Space.py' args: 'yet another args'
+        
+      Alerts without Corrective Actions (possible page out?):
+      Alert without corrective-action: 'handling_my_alert_Disk_IO'
+      Alert without corrective-action: 'handling_my_alert_CPU_Network_Bandwidth'
+      Alert without corrective-action: 'handling_my_alert_Network_Bandwidth'
+
+The program uses JBPT to render the model as a PNG file (you need to install the `graphviz` package in RedHat and Debian. To install `graphviz` in another O.S., refer to [https://graphviz.gitlab.io/download/](https://graphviz.gitlab.io/download/) --note: I'm not sure if it is able to render in Mac OS though, [https://github.com/BPT-NH/jpbt/blob/master/jbpt-core/src/main/java/org/jbpt/utils/IOUtils.java#L29-L31](https://github.com/BPT-NH/jpbt/blob/master/jbpt-core/src/main/java/org/jbpt/utils/IOUtils.java#L29-L31), and then it should show a caught exception with message `Can not find Graphviz binary!`). An example of the rendering:
+
+[extra/rendered_model.png](extra/rendered_model.png)
 
