@@ -108,3 +108,5 @@ The program uses JBPT to render the model as a PNG file (you need to install the
 
 ![extra/rendered_model.png](extra/rendered_model.png)
 
+Note that the downstream arcs mean alerts, and the upstream arcs mean corrective actions.
+
