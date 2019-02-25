@@ -106,5 +106,5 @@ Example execution through Maven:
 
 The program uses JBPT to render the model as a PNG file (you need to install the `graphviz` package in RedHat and Debian. To install `graphviz` in another O.S., refer to [https://graphviz.gitlab.io/download/](https://graphviz.gitlab.io/download/) --note: I'm not sure if it is able to render in Mac OS though, [https://github.com/BPT-NH/jpbt/blob/master/jbpt-core/src/main/java/org/jbpt/utils/IOUtils.java#L29-L31](https://github.com/BPT-NH/jpbt/blob/master/jbpt-core/src/main/java/org/jbpt/utils/IOUtils.java#L29-L31), and then it should show a caught exception with message `Can not find Graphviz binary!`). An example of the rendering:
 
-[extra/rendered_model.png](extra/rendered_model.png)
+![extra/rendered_model.png](extra/rendered_model.png)
 
