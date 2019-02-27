@@ -52,7 +52,22 @@ or merely
 
 * *"... to ultimately fire __some [well-known]__ transitions of the net by ..."*?
 
-This is a very early idea, which needs more analysis and insights).
+JBPT is able to do liveness and, more generally, behavioral analysis of the
+Petri Net model using a remote service (based on the LoLA algorithm, presented
+in the paper Wolf, Karsten: "Generating Petri net state spaces", in the 28th
+International Conference on Applications and Theory of Petri Nets and
+Concurrency, 2007. pp. 29–42. LNCS 4546, Springer, 2007). This remote service
+[https://github.com/jbpt/codebase/blob/master/jbpt-petri/src/main/java/org/jbpt/petri/behavior/LolaSoundnessChecker.java#L20](https://github.com/jbpt/codebase/blob/master/jbpt-petri/src/main/java/org/jbpt/petri/behavior/LolaSoundnessChecker.java#L20)
+unfortunately doesn't seem to be accessible online currently -there are
+alternatives though, like local tools freely downloadable at
+[https://theo.informatik.uni-rostock.de/theo-forschung/werkzeuge/](https://theo.informatik.uni-rostock.de/theo-forschung/werkzeuge/),
+or even alternative algorithms to do this behavioral analysis of the
+Petri Net, like the
+[https://github.com/CvO-Theory/apt/blob/master/src/module/uniol/apt/analysis/live/Live.java](https://github.com/CvO-Theory/apt/blob/master/src/module/uniol/apt/analysis/live/Live.java).
+This liveness perspective of the alert model (Petri Net) to check if it is
+self-corrective (self-healing) is a very early idea, which needs more analysis
+and insights.
+
 Returning to the main topic, Petri-Nets are a well-known model to represent
 Systems Engineering (see, e.g.,
 [ISO/IEC 15909-1:2004 Systems and software engineering -- High-level Petri nets -- Part 1: Concepts, definitions and graphical notation](https://www.iso.org/standard/38225.html)
@@ -104,7 +119,14 @@ Example execution through Maven:
       Alert without corrective-action: 'handling_my_alert_CPU_Network_Bandwidth'
       Alert without corrective-action: 'handling_my_alert_Network_Bandwidth'
 
-The program uses JBPT to render the model as a PNG file (you need to install the `graphviz` package in RedHat and Debian. To install `graphviz` in another O.S., refer to [https://graphviz.gitlab.io/download/](https://graphviz.gitlab.io/download/) --note: I'm not sure if it is able to render in Mac OS though, [https://github.com/BPT-NH/jpbt/blob/master/jbpt-core/src/main/java/org/jbpt/utils/IOUtils.java#L29-L31](https://github.com/BPT-NH/jpbt/blob/master/jbpt-core/src/main/java/org/jbpt/utils/IOUtils.java#L29-L31), and then it should show a caught exception with message `Can not find Graphviz binary!`). An example of the rendering:
+The program uses JBPT to render the model as a PNG file (you need to install
+the `graphviz` package in RedHat and Debian. To install `graphviz` in another
+O.S., refer to
+[https://graphviz.gitlab.io/download/](https://graphviz.gitlab.io/download/)
+ --note: I'm not sure if it is able to render in Mac OS though,
+[https://github.com/BPT-NH/jpbt/blob/master/jbpt-core/src/main/java/org/jbpt/utils/IOUtils.java#L29-L31](https://github.com/BPT-NH/jpbt/blob/master/jbpt-core/src/main/java/org/jbpt/utils/IOUtils.java#L29-L31),
+and then it should show a caught exception with message `Can not find Graphviz
+binary!`). An example of the rendering:
 
 ![extra/rendered_model.png](extra/rendered_model.png)
 

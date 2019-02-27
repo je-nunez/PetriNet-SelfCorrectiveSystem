@@ -19,6 +19,8 @@ import org.jbpt.petri.NetSystem;
 import org.jbpt.petri.Node;
 import org.jbpt.petri.Place;
 import org.jbpt.petri.Transition;
+import org.jbpt.petri.behavior.LolaSoundnessChecker; // behavioral (liveness)
+import org.jbpt.petri.behavior.LolaSoundnessCheckerResult; // analysis
 import org.jbpt.petri.io.PNMLSerializer;
 import org.jbpt.throwable.SerializationException;
 import org.jbpt.utils.IOUtils;
@@ -146,6 +148,30 @@ public final class SelfCorrectiveSystem {
     }
   }
 
+  protected void livenessAnalysis() {
+    System.out.println("Behavioral analysis of the Petri Net model"
+                       + ", including liveness...");
+    try {
+      LolaSoundnessCheckerResult behavioralResults =
+          LolaSoundnessChecker.analyzeSoundness(petriNet);
+
+      System.out.println("Liveness of the Petri Net model: "
+                         + behavioralResults.hasLiveness());
+      System.out.println("QuasiLiveness of the Petri Net model: "
+                         + behavioralResults.hasQuasiLiveness());
+      System.out.println("Full behavioral results: "
+                         + behavioralResults);
+    } catch (IOException exc) {
+      System.err.println("Remote service exception: " + exc);
+      // exc.printStackTrace();
+    } catch (SerializationException exc) {
+      System.err.println("Serialization exception: ");
+      exc.printStackTrace();
+    }
+
+    System.out.println();
+  }
+
   protected void printPetriNet() {
 
     try {
@@ -231,6 +257,13 @@ public final class SelfCorrectiveSystem {
     scSystem.dumpPetriNetCorrectiveActions();
 
     scSystem.dumpAlertsWithoutCorrectiveActions();
+    // The following call invokes an external service at the University of
+    // Rostock, in Germany. See org.jbpt.petri.behavior.LolaSoundnessChecker
+    // (There are other alternatives for this service, like tools that can be
+    // downloaded, like
+    // https://theo.informatik.uni-rostock.de/theo-forschung/werkzeuge/ )
+    scSystem.livenessAnalysis();
+
     scSystem.renderPetriNetPNG(
         System.getProperty("java.io.tmpdir"),
         "rendered_model.png"
