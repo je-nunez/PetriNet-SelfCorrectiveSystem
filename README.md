@@ -52,6 +52,11 @@ or merely
 
 * *"... to ultimately fire __some [well-known]__ transitions of the net by ..."*?
 
+The answer in the alternative above does not need to be theoretical, and in
+some systems (like a self-driving car) the first answer (full liveness) is
+more appropiate, whereas in systems that accept some kind of graceful
+degradation, then the second answer can be accepted.
+
 JBPT is able to do liveness and, more generally, behavioral analysis of the
 Petri Net model using a remote service (based on the LoLA algorithm, presented
 in the paper Wolf, Karsten: "Generating Petri net state spaces", in the 28th
