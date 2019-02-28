@@ -78,6 +78,18 @@ and
 
 This program reads a Petri Net system from a XML file in [PNML format](https://en.wikipedia.org/wiki/Petri_Net_Markup_Language).
 
+If you want do a liveness analysis of the self-corrective model (see section
+above), then it is necessary that you have the CvO-Theory's `apt.jar` archive
+in your system (please, see
+[https://github.com/CvO-Theory/apt/blob/master/doc/obtaining.md#build-your-own-version](https://github.com/CvO-Theory/apt/blob/master/doc/obtaining.md#build-your-own-version)
+for either direct download of this JAR file or build instructions from source code).
+Then, set the environment variable `MY_CoV_THEORY_APT_JAR` to the pathname
+where to locate this `apt.jar` file in your system:
+
+      $ # in Linux/Unix, sh-alike shells:
+      $ MY_CoV_THEORY_APT_JAR=path/to/apt.jar
+      $ export MY_CoV_THEORY_APT_JAR
+
 Example execution through Maven:
 
       $ mvn
@@ -118,6 +130,17 @@ Example execution through Maven:
       Alert without corrective-action: 'handling_my_alert_Disk_IO'
       Alert without corrective-action: 'handling_my_alert_CPU_Network_Bandwidth'
       Alert without corrective-action: 'handling_my_alert_Network_Bandwidth'
+       
+      # The section below of the output assumes that the environment var
+      # MY_CoV_THEORY_APT_JAR has been set up correctly in your system to
+      # do its liveness analysis of the model (see above for an explanation):
+        
+      Executing APT strongly_live behavioral analysis:
+          java -jar path/to/apt.jar strongly_live pnml:/tmp/model-petri-net-3986710874412346196.pnml
+      strongly_live: No
+      sample_witness_transition: handling_my_alert_CPU
+      sample_witness_firing_sequence: [handling_my_alert_CPU_Network_Bandwidth, handling_my_alert_Disk_IO]
+
 
 The program uses JBPT to render the model as a PNG file (you need to install
 the `graphviz` package in RedHat and Debian. To install `graphviz` in another

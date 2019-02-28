@@ -148,7 +148,10 @@ public final class SelfCorrectiveSystem {
     }
   }
 
-  protected void livenessAnalysis() {
+  protected void livenessAnalysisJbpt() {
+    // Liveness analysis via JBPT (see its
+    // org.jbpt.petri.behavior.LolaSoundnessChecker)
+
     System.out.println("Behavioral analysis of the Petri Net model"
                        + ", including liveness...");
     try {
@@ -171,6 +174,13 @@ public final class SelfCorrectiveSystem {
 
     System.out.println();
   }
+
+  protected void livenessAnalysisApt() {
+    // Liveness analysis via APT (this is an external tool, so
+    // a utility class exists to wrap its invocation)
+    AptStronglyLiveAnalysis.livenessAnalysisApt(petriNet);
+  }
+
 
   protected void printPetriNet() {
 
@@ -262,7 +272,9 @@ public final class SelfCorrectiveSystem {
     // (There are other alternatives for this service, like tools that can be
     // downloaded, like
     // https://theo.informatik.uni-rostock.de/theo-forschung/werkzeuge/ )
-    scSystem.livenessAnalysis();
+    scSystem.livenessAnalysisJbpt();
+
+    scSystem.livenessAnalysisApt();
 
     scSystem.renderPetriNetPNG(
         System.getProperty("java.io.tmpdir"),
