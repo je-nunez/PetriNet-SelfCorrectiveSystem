@@ -141,10 +141,11 @@ Example execution through Maven:
       # do its liveness analysis of the model (see above for an explanation):
         
       Executing APT strongly_live behavioral analysis:
-          java -jar path/to/apt.jar strongly_live pnml:/tmp/model-petri-net-3986710874412346196.pnml
+          java -jar path/to/apt.jar examine_pn pnml:/tmp/model-petri-net-3986710874412346196.pnml
+      ...
       strongly_live: No
-      sample_witness_transition: handling_my_alert_CPU
-      sample_witness_firing_sequence: [handling_my_alert_CPU_Network_Bandwidth, handling_my_alert_Disk_IO]
+      weakly_live: No
+      simply_live: Yes
 
 
 The program uses JBPT to render the model as a PNG file (you need to install

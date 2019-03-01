@@ -18,7 +18,8 @@ public final class AptStronglyLiveAnalysis {
   private static String envVarPathCoVTheoryAptJar = "MY_CoV_THEORY_APT_JAR";
 
   private static String templateAptStrongLivenessAnalysis =
-      "java -jar %s strongly_live pnml:%s";
+      "java -jar %s examine_pn pnml:%s";
+  // "examine_pn" includes several tests, as well as "strongly_live"
 
   private AptStronglyLiveAnalysis() {
      // this class is a utility class (so instance constructor is private)
