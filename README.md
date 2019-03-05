@@ -179,8 +179,9 @@ If that Petri Net model [src/main/resources/sample_petri_net_resources_dimension
 -presumably, issuing a page-out to correct the situation
 `handling_my_alert_Disk_IO`, probably by following some established System
 Engineering guideline to solve this situation, although how this situation is
-solved depends on the hardware and software architecture available-), but with
-this more connected model, the Petri Net becomes live:
+solved in an actual deployment depends on the hardware and software
+architecture available, like, e.g., inside a self-driving car-), but with this
+more connected model, the Petri Net becomes live:
 
       strongly_live: Yes
 
