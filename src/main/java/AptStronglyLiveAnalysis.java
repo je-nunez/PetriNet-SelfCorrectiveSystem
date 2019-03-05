@@ -20,6 +20,14 @@ public final class AptStronglyLiveAnalysis {
   private static String templateAptStrongLivenessAnalysis =
       "java -jar %s examine_pn pnml:%s";
   // "examine_pn" includes several tests, as well as "strongly_live"
+  // -although, while the option "examine_pn" is more comprehensive, the
+  // option "strongly_live" is able to return a witness transition and arc
+  // why the Petri Net model is not strongly live. Probably an option could
+  // be to call the option "strongly_live" after calling "examine_pn" if this
+  // one returns that the Petri Net model is not strongly live; or another
+  // alternative is using the CoV-Theory's APT-JSON.jar instead of theirs
+  // APT.jar, for the former is able to run multiple tests at the same
+  // program "java -jar apt-json.jar" fork/exec invocation.
 
   private AptStronglyLiveAnalysis() {
      // this class is a utility class (so instance constructor is private)

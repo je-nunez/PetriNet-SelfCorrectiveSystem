@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<pnml>
+
+<!-- This approach separates the system according to
+     its resource dimensions: ie., one resource
+     dimension for the CPU available in the system,
+     another dimension for the RAM available, and
+     so -->
+
+<net id="resource_Dimensions_of_my_system">
+
+    <place id="resource_dimension_CPU">
+        <graphics>
+            <position x="1168" y="87" />
+            <dimension x="13" y="13" />
+        </graphics>
+        <name>
+            <text>System resource dimension: CPU available</text>
+         </name>
+         <initialMarking>
+            <!-- capacity of this resource dimension when system is idle -->
+            <text>1</text>
+         </initialMarking>
+    </place>
+    <place id="resource_dimension_RAM">
+         <graphics>
+            <position x="1096" y="87" />
+            <dimension x="13" y="13" />
+         </graphics>
+         <name>
+            <text>System resource dimension: RAM available</text>
+         </name>
+         <initialMarking>
+            <!-- capacity of this resource dimension when system is idle -->
+            <text>1</text>
+         </initialMarking>
+    </place>
+    <place id="resource_dimension_Disk_IO">
+         <!-- could be several of this -->
+         <graphics>
+            <position x="1024" y="87" />
+            <dimension x="13" y="13" />
+         </graphics>
+         <name>
+            <text>System resource dimension: Disk I/O available</text>
+         </name>
+         <initialMarking>
+            <!-- capacity of this resource dimension when system is idle -->
+            <text>1</text>
+         </initialMarking>
+    </place>
+    <place id="resource_dimension_Network_Bandwidth">
+         <graphics>
+            <position x="952" y="87" />
+            <dimension x="13" y="13" />
+         </graphics>
+         <name>
+            <text>System resource dimension: Network Bandwidth available</text>
+         </name>
+         <initialMarking>
+            <!-- capacity of this resource dimension when system is idle -->
+            <text>1</text>
+         </initialMarking>
+    </place>
+    <place id="resource_dimension_Disk_Space">
+         <graphics>
+            <position x="880" y="87" />
+            <dimension x="13" y="13" />
+         </graphics>
+         <name>
+            <text>System resource dimension: Disk Space available</text>
+         </name>
+         <initialMarking>
+            <!-- capacity of this resource dimension when system is idle -->
+            <text>1</text>
+         </initialMarking>
+    </place>
+    <!-- ... more resource dimensions here, like Router/Switch queues,
+         application response times, etc ... -->
+
+    <transition id="handling_my_alert_CPU">
+        <graphics>
+            <position  x="700" y="55" />
+            <dimension x="13" y="13" />
+        </graphics>
+        <!-- this is the label - .getLabel() - of the transition -->
+        <name>
+            <text>We are at this transition once we have received my_alert_CPU</text>
+         </name>
+    </transition>
+    <transition id="handling_my_alert_RAM">
+        <graphics>
+            <position  x="628" y="55" />
+            <dimension x="13" y="13" />
+        </graphics>
+        <name>
+            <text>We are at this transition once we have received my_alert_RAM</text>
+         </name>
+    </transition>
+    <transition id="handling_my_alert_Disk_Space">
+        <graphics>
+            <position  x="556" y="55" />
+            <dimension x="13" y="13" />
+        </graphics>
+        <name>
+            <text>We are at this transition once we have received my_alert_Disk_Space</text>
+         </name>
+    </transition>
+    <transition id="handling_my_alert_Disk_IO">
+        <graphics>
+            <position  x="412" y="55" />
+            <dimension x="13" y="13" />
+        </graphics>
+        <name>
+            <text>We are at this transition once we have received my_alert_Disk_IO</text>
+         </name>
+    </transition>
+    <transition id="handling_my_alert_Network_Bandwidth">
+        <graphics>
+            <position  x="440" y="55" />
+            <dimension x="13" y="13" />
+        </graphics>
+        <name>
+            <text>We are at this transition once we have received my_alert_Network_Bandwidth</text>
+         </name>
+    </transition>
+    <transition id="handling_my_alert_CPU_Network_Bandwidth">
+        <graphics>
+            <position  x="440" y="55" />
+            <dimension x="13" y="13" />
+        </graphics>
+        <name>
+            <text>We are at this transition once we have received my_alert_CPU_Network_Bandwidth</text>
+         </name>
+    </transition>
+
+    <!-- ... more ... -->
+
+
+    <arc id="my_alert_CPU"
+            source="resource_dimension_CPU"
+            target="handling_my_alert_CPU" />
+
+    <arc id="my_alert_RAM"
+            source="resource_dimension_RAM"
+            target="handling_my_alert_RAM" />
+
+    <arc id="my_alert_Disk_Space"
+            source="resource_dimension_Disk_Space"
+            target="handling_my_alert_Disk_Space" />
+
+    <arc id="my_alert_Disk_IO"
+            source="resource_dimension_Disk_IO"
+            target="handling_my_alert_Disk_IO" />
+
+    <arc id="my_alert_Network_Bandwidth"
+            source="resource_dimension_Network_Bandwidth"
+            target="handling_my_alert_Network_Bandwidth" />
+
+    <arc id="my_alert_CPU_Network_Bandwidth_CPU"
+            source="resource_dimension_CPU"
+            target="handling_my_alert_CPU_Network_Bandwidth" />
+
+    <arc id="my_alert_CPU_Network_Bandwidth_NetwBW"
+            source="resource_dimension_Network_Bandwidth"
+            target="handling_my_alert_CPU_Network_Bandwidth" />
+    <!-- ... more triggering alerts (arcs) ... -->
+
+    <arc id="correcting_alert_CPU" source="handling_my_alert_CPU" target="resource_dimension_CPU" >
+        <toolspecific tool="AutoCorrective" version="0.1">
+            <command program="fix_alert_CPU.py" arg="some args" />
+        </toolspecific>
+    </arc>
+
+    <arc id="correcting_alert_RAM" source="handling_my_alert_RAM" target="resource_dimension_RAM" >
+        <toolspecific tool="AutoCorrective" version="0.1">
+            <command program="fix_alert_RAM.py" arg="other args" />
+        </toolspecific>
+    </arc>
+
+    <arc id="correcting_alert_Disk_Space" source="handling_my_alert_Disk_Space" target="resource_dimension_Disk_Space" >
+        <toolspecific tool="AutoCorrective" version="0.1">
+            <command program="fix_alert_Disk_Space.py" arg="yet another args" />
+        </toolspecific>
+    </arc>
+
+    <arc id="correcting_alert_Disk_IO" source="handling_my_alert_Disk_IO" target="resource_dimension_Disk_IO" >
+        <toolspecific tool="AutoCorrective" version="0.1">
+            <command program="submit_a_page_out.py" arg="'Disk I/O' and some other arguments for the page-out" />
+        </toolspecific>
+    </arc>
+
+    <arc id="correcting_alert_Network_Bandwidth" source="handling_my_alert_Network_Bandwidth" target="resource_dimension_Network_Bandwidth" >
+        <toolspecific tool="AutoCorrective" version="0.1">
+            <command program="submit_a_page_out.py" arg="'Network Bandwidth' and more arguments for paging out" />
+            <!-- an alternative action could be network rate-limiting at some [input] point into the chain, etc.,
+                 but this depends in the specific deployment -->
+        </toolspecific>
+    </arc>
+
+        <!-- A internal, temporary place to represent once this combined case has been paged out -->
+        <place id="temporary_place_when_CPU_Network_Bandwidth_page_out_has_been_emitted">
+            <graphics>
+                <position x="808" y="87" />
+                <dimension x="13" y="13" />
+            </graphics>
+            <name>
+                <text>A internal, temporary place to represent once this combined case has been paged out</text>
+             </name>
+        </place>
+    <arc id="correcting_alert_CPU_Network_Bandwidth_CPU" source="handling_my_alert_CPU_Network_Bandwidth"
+               target="temporary_place_when_CPU_Network_Bandwidth_page_out_has_been_emitted" >
+        <toolspecific tool="AutoCorrective" version="0.1">
+            <command program="submit_a_page_out.py" arg="'CPU and Network Bandwidth' and more arguments for paging out" />
+        </toolspecific>
+    </arc>
+
+        <transition id="once_the_page_for_my_alert_CPU_Network_Bandwidth_has_been_solved">
+            <graphics>
+                <position  x="368" y="55" />
+                <dimension x="13" y="13" />
+            </graphics>
+            <name>
+                <text>We are at this transition once the page for my_alert_CPU_Network_Bandwidth has been solved</text>
+             </name>
+        </transition>
+        <arc id="page_for_my_alert_CPU_Network_Bandwidth_has_been_solved"
+             source="temporary_place_when_CPU_Network_Bandwidth_page_out_has_been_emitted"
+             target="once_the_page_for_my_alert_CPU_Network_Bandwidth_has_been_solved" >
+        </arc>
+        <arc id="restoring_initial_CPU_resource_availability"
+             source="once_the_page_for_my_alert_CPU_Network_Bandwidth_has_been_solved"
+             target="resource_dimension_CPU" >
+             <toolspecific tool="AutoCorrective" version="0.1">
+                 <command program="null_not_needed" arg="null" />
+             </toolspecific>
+        </arc>
+        <arc id="restoring_initial_Network_Bandwidth_resource_availability"
+             source="once_the_page_for_my_alert_CPU_Network_Bandwidth_has_been_solved"
+             target="resource_dimension_Network_Bandwidth" >
+             <toolspecific tool="AutoCorrective" version="0.1">
+                 <command program="null_not_needed" arg="null" />
+             </toolspecific>
+        </arc>
+    <!-- ... more corrective actions (arcs) ... -->
+
+
+</net>
+</pnml>

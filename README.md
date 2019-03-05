@@ -159,5 +159,48 @@ binary!`). An example of the rendering:
 
 ![extra/rendered_model.png](extra/rendered_model.png)
 
-Note that the downstream arcs mean alerts, and the upstream arcs mean corrective actions.
+Note that the downstream arcs (from places "p#" to transitions "t#") mean alerts, and the upstream arcs mean corrective actions.
+
+If that Petri Net model [src/main/resources/sample_petri_net_resources_dimensions.pnml](src/main/resources/sample_petri_net_resources_dimensions.pnml) is complemented with some corrective actions in order to make the model more connected as [src/main/resources/sample_petri_net_resources_dimensions_and_some_pages.pnml](src/main/resources/sample_petri_net_resources_dimensions_and_some_pages.pnml):
+
+      Corrective-Action: from 'handling_my_alert_Disk_IO' -- to --> 'System resource dimension: Disk I/O available'
+                   run : command: 'submit_a_page_out.py' args: ''Disk I/O' and some other arguments for the page-out'
+      Corrective-Action: from 'handling_my_alert_Network_Bandwidth' -- to --> 'System resource dimension: Network Bandwidth available'
+                   run : command: 'submit_a_page_out.py' args: ''Network Bandwidth' and more arguments for paging out'
+      Corrective-Action: from 'handling_my_alert_CPU_Network_Bandwidth' -- to --> 'A internal, temporary place to represent once this combined case has been paged out'
+                   run : command: 'submit_a_page_out.py' args: ''CPU and Network Bandwidth' and more arguments for paging out'
+      Corrective-Action: from 'once_the_page_for_my_alert_CPU_Network_Bandwidth_has_been_solved' -- to --> 'System resource dimension: Network Bandwidth available'
+                   run : command: 'null_not_needed' args: 'null'
+      Corrective-Action: from 'once_the_page_for_my_alert_CPU_Network_Bandwidth_has_been_solved' -- to --> 'System resource dimension: CPU available'
+                   run : command: 'null_not_needed' args: 'null'
+
+(note that some of the above corrective actions, like to correct the situation
+`handling_my_alert_Disk_IO`, involve executing `submit_a_page_out.py`
+-presumably, issuing a page-out to correct the situation
+`handling_my_alert_Disk_IO`, probably by following some established System
+Engineering guideline to solve this situation, although how this situation is
+solved depends on the hardware and software architecture available-), but with
+this more connected model, the Petri Net becomes live:
+
+      strongly_live: Yes
+
+The rendering of this model is:
+
+![extra/rendered_model_an_example_of_a_strongly_live_model.png](extra/rendered_model_an_example_of_a_strongly_live_model.png)
+
+with the following legend in the graph:
+
+      Idx 'p1' means place 'resource_dimension_Network_Bandwidth'
+      Idx 'p2' means place 'resource_dimension_Disk_Space'
+      Idx 'p3' means place 'resource_dimension_Disk_IO'
+      Idx 'p4' means place 'resource_dimension_RAM'
+      Idx 'p5' means place 'resource_dimension_CPU'
+      Idx 'p6' means place 'temporary_place_when_CPU_Network_Bandwidth_page_out_has_been_emitted'
+      Idx 't7' means transition 'We are at this transition once we have received my_alert_CPU'
+      Idx 't8' means transition 'We are at this transition once the page for my_alert_CPU_Network_Bandwidth has been solved'
+      Idx 't9' means transition 'We are at this transition once we have received my_alert_RAM'
+      Idx 't10' means transition 'We are at this transition once we have received my_alert_CPU_Network_Bandwidth'
+      Idx 't11' means transition 'We are at this transition once we have received my_alert_Network_Bandwidth'
+      Idx 't12' means transition 'We are at this transition once we have received my_alert_Disk_Space'
+      Idx 't13' means transition 'We are at this transition once we have received my_alert_Disk_IO'
 
